@@ -85,7 +85,7 @@ public class KuroController : MonoBehaviour
         }
         kuroAnimator.SetTrigger("Non-Attack");
 
-        //Attempts to make Kuro's vision range... using a Raycast... fucking thing to be so hard to grasp!!! 
+        //Attempts to make Kuro's vision range... using a Raycast... effing thing to be so hard to grasp!!! 
         EnemyDetected(); //1.Testing if a hit is made. And if the ray is being casted.   
 
     }
