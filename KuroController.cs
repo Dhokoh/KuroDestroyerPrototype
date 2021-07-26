@@ -78,8 +78,7 @@ public class KuroController : MonoBehaviour
         KuroControllerXform.Translate(0, kuroJump * kuroJumpHgt * Time.deltaTime, 0);
         
         //Code for attacking. Very basic really. Setting triggers on animations. I think it's the "best option" but well, I'm a noob. So maybe there's
-        //more efficient one... anyways, this is mine, I'm doing good. Just... really, for fuck's sake, ****NEVER SMOKE BEFORE CODING****...
-        //do it later on ****DURING CODING****.
+        //more efficient one... anyways, this is mine, I'm doing good. 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             kuroAnimator.SetTrigger("Attack");
