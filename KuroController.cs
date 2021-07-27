@@ -9,6 +9,7 @@ public class KuroController : MonoBehaviour
     public GameObject KuroControllerGameObject;
     public Transform KuroControllerXform;
     public Animator kuroAnimator;
+    public SpriteRenderer kuroSprite;
 
     public GameObject EnemyGameObject;
 
@@ -45,7 +46,6 @@ public class KuroController : MonoBehaviour
 
     public void MoveKuro()
     {
-        SpriteRenderer kuroSprite = this.GetComponentInChildren<SpriteRenderer>();
         //attempt of Transform.Translate()
         if (Input.GetAxis("Horizontal") == 1 | Input.GetKeyDown(KeyCode.D))
         {
@@ -64,6 +64,7 @@ public class KuroController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        kuroSprite = this.GetComponentInChildren<SpriteRenderer>();
         KuroControllerGameObject = this.gameObject;
         KuroControllerXform = this.GetComponentInChildren<Transform>();
         kuroAnimator = this.gameObject.GetComponentInChildren<Animator>();
