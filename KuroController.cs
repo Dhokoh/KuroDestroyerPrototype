@@ -45,15 +45,22 @@ public class KuroController : MonoBehaviour
 
     public void MoveKuro()
     {
+        SpriteRenderer kuroSprite = this.GetComponentInChildren<SpriteRenderer>();
         //attempt of Transform.Translate()
-        if (Input.GetAxis("Horizontal") == 1 | Input.GetAxis("Horizontal") == -1)
+        if (Input.GetAxis("Horizontal") == 1 | Input.GetKeyDown(KeyCode.D))
         {
+            kuroSprite.flipX = false;
             float kuroMoves = Input.GetAxis("Horizontal");
-            Debug.Log(kuroMoves);
             KuroControllerXform.Translate(kuroMoves * kuroMovSPD * Time.deltaTime, 0, 0);
         }
+        if (Input.GetAxis("Horizontal") == -1 | Input.GetKeyDown(KeyCode.A))
+        {
+            kuroSprite.flipX = true;
+            float kuroMoves = Input.GetAxis("Horizontal");
+            KuroControllerXform.Translate(kuroMoves * kuroMovSPD * Time.deltaTime,0,0);
+        }
     }
-
+    
     // Start is called before the first frame update
     void Start()
     {
