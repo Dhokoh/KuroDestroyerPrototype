@@ -18,26 +18,41 @@ public class KuroController : MonoBehaviour
 
     //Methods
 
-    public bool EnemyDetected()
+     public bool EnemyDetected()
     {
-        bool kuroSaw = false;
         RaycastHit2D kuroSight;
-        kuroSight = Physics2D.Raycast(KuroControllerGameObject.transform.position, KuroControllerGameObject.transform.right);
-        Debug.DrawRay(this.transform.position, this.transform.right, Color.red);
-        if (kuroSight.collider != null && kuroSight.rigidbody == EnemyGameObject.GetComponent<Rigidbody2D>())
+        int playerLayer = 8;
+        int layerMask = 1 << playerLayer;
+        if (kuroSprite.flipX == false)
         {
-            kuroSaw = true;
-            Debug.Log(kuroSaw);
-            return kuroSaw;
+            kuroSight = Physics2D.Raycast(kuroSprite.transform.position, kuroSprite.transform.right, Mathf.Infinity);
+            Debug.DrawRay(kuroSprite.transform.position, kuroSprite.transform.right, Color.blue);
+            Debug.Log(kuroSight.collider.name);
+            if (kuroSight.rigidbody == EnemyCollider)
+            {
+                Debug.Log(kuroSight.collider == EnemyCollider);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        else
+        if (kuroSprite.flipX == true)
         {
-            kuroSaw = false;
-            Debug.Log(kuroSaw);
-            return kuroSaw;
+            kuroSight = Physics2D.Raycast(kuroSprite.transform.position, -kuroSprite.transform.right, Mathf.Infinity);
+            Debug.DrawRay(kuroSprite.transform.position, -kuroSprite.transform.right, Color.blue);
+            if (kuroSight.rigidbody == EnemyGameObject.GetComponent<BoxCollider2D>())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
+        return false;
     }
-
     public void RaycastTest()
     {
         RaycastHit2D kuroSight = Physics2D.Raycast(this.transform.position, this.transform.right);
