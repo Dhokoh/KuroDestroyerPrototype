@@ -18,47 +18,51 @@ public class KuroController : MonoBehaviour
 
     //Methods
 
-     public bool EnemyDetected()
+      public bool EnemyDetected() //Method defined to test if the raycast detects the Collider from the Enemy. 
+      {
+        RaycastHit2D sight;
+        int layerMask = 1 << 9;
+        sight = Physics2D.Raycast(kuroSprite.transform.position, kuroSprite.transform.right, Mathf.Infinity, layerMask);
+        Debug.DrawRay(kuroSprite.transform.position, kuroSprite.transform.right, Color.cyan);
+        if (sight.collider == EnemyCollider)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+       }
+
+    public void KuroSpotsEnemy() //This method is supposed to be used for Kuro to "see" enemies and "react" to their sighting. 
+                                 //Still incomplete as I'm not able to turn it into a boolean to test the raycast in both the x axis
+                                 // and the -x axis.
     {
         RaycastHit2D kuroSight;
-        int playerLayer = 8;
-        int layerMask = 1 << playerLayer;
-        if (kuroSprite.flipX == false)
+        int layerMask = 1 << 9;
+        kuroSight = Physics2D.Raycast(kuroSprite.transform.position, kuroSprite.transform.right, Mathf.Infinity, layerMask);
+        if (kuroSight.collider != null)
         {
-            kuroSight = Physics2D.Raycast(kuroSprite.transform.position, kuroSprite.transform.right, Mathf.Infinity);
             Debug.DrawRay(kuroSprite.transform.position, kuroSprite.transform.right, Color.blue);
-            Debug.Log(kuroSight.collider.name);
-            if (kuroSight.rigidbody == EnemyCollider)
-            {
-                Debug.Log(kuroSight.collider == EnemyCollider);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            Debug.Log(kuroSight.collider == EnemyCollider);
+            Debug.Log(kuroSight.collider);
+            //return true;
         }
         if (kuroSprite.flipX == true)
         {
-            kuroSight = Physics2D.Raycast(kuroSprite.transform.position, -kuroSprite.transform.right, Mathf.Infinity);
-            Debug.DrawRay(kuroSprite.transform.position, -kuroSprite.transform.right, Color.blue);
-            if (kuroSight.rigidbody == EnemyGameObject.GetComponent<BoxCollider2D>())
+            Debug.Log(kuroSprite.flipX);
+            kuroSight = Physics2D.Raycast(kuroSprite.transform.position, -kuroSprite.transform.right, Mathf.Infinity, layerMask);
+            Debug.DrawRay(kuroSprite.transform.position, -kuroSprite.transform.right, Color.yellow);
+            if (kuroSight.collider != null)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                Debug.DrawRay(kuroSprite.transform.position, -kuroSprite.transform.right, Color.yellow);
+                Debug.Log(kuroSight.collider == EnemyCollider);
+                Debug.Log(kuroSight.collider);
+                //return true;
             }
         }
-        return false;
+        //return false;
     }
-    public void RaycastTest()
-    {
-        RaycastHit2D kuroSight = Physics2D.Raycast(this.transform.position, this.transform.right);
-        Debug.DrawRay(this.transform.position, this.transform.right, Color.blue);
-    }
-
     public void MoveKuro()
     {
         //attempt of Transform.Translate()
