@@ -4,21 +4,46 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    public float enemyWalkSpeed = 3f;
+
     public GameObject EnemyControllerGameObject;
-    public Transform enemySpriteTransform;
+    public BoxCollider2D EnemyCollider;
+    public SpriteRenderer enemySprite;
     
     public GameObject KuroControllerGameObject;
     public BoxCollider2D kuroCollider;
 
     //Methods
 
-    //this one is to test how raycast works
+    //this one is to test how raycast works on this with A MERE FUNCTION TO CAST A RAY AND WITH DEBUG.LOG SEE IT ON THE EDITOR. 
     public void RaycastTest()
     {
-        RaycastHit2D enemySight = Physics2D.Raycast(EnemyControllerGameObject.transform.position, -EnemyControllerGameObject.transform.right,6);
+        int playerLayermask = 1 << 8;
+        RaycastHit2D enemySight = Physics2D.Raycast(enemySprite.transform.position, enemySprite.transform.right, Mathf.Infinity, playerLayermask);
+        Debug.DrawRay(enemySprite.transform.position, -enemySprite.transform.right, Color.green);
+        if (enemySight.collider != null)
+        {
+            Debug.Log(enemySight.collider);
+            Debug.Log(enemySight.collider == kuroCollider);
+            //return true;
+        }
+        else
+        {
+            Debug.Log(enemySight.collider);
+            Debug.Log(enemySight.collider == kuroCollider);
+            //return false
+        }
+        
+    }
 
-        Debug.DrawRay(this.transform.position, -this.transform.right, Color.green);
-        Debug.Log(enemySight.collider == kuroCollider);
+    //boolpublic bool PlayerDetected()
+    public void MoveEnemy()   
+    {
+        while (EnemyControllerGameObject.transform.position.x <= enemyWalkSpeed)
+        {
+            EnemyControllerGameObject.transform.Translate(enemyWalkSpeed * Time.deltaTime, 0, 0);
+        }
+        
     }
 
 
@@ -36,13 +61,15 @@ public class EnemyController : MonoBehaviour
         //Debug.Log(KuroControllerGameObject.name);
 
         EnemyControllerGameObject = GameObject.FindGameObjectWithTag("Enemy");
-        enemySpriteTransform = EnemyControllerGameObject.GetComponentInChildren<Transform>();
+        enemySprite = this.GetComponentInChildren<SpriteRenderer>();
+        EnemyCollider = this.GetComponent<BoxCollider2D>();
     }
 
 
     //Update is called once per frame
     void Update()
     {
+        MoveEnemy();
         RaycastTest();
     }
 }
