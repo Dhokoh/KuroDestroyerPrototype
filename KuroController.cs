@@ -16,6 +16,7 @@ public class KuroController : MonoBehaviour
 
     float kuroMovSPD = 8f;
     float kuroJumpHgt = 8f;
+    float kuroHP;
 
     //Methods
 
@@ -36,8 +37,7 @@ public class KuroController : MonoBehaviour
     }
 
     public bool KuroSpotsEnemy() //This method is supposed to be used for Kuro to "see" enemies and "react" to their sighting. 
-    //Tried to check it with Debug.Logs but I was only able to see the boolean results there as the returns are not shown in the Console of Unity, 
-    //but the right values show on Debug.Logs.                              
+                                 //This method works in mysterious ways, Kuro Spots an enemy ONLY after jumping over the enemy and being "behind" it.
     {
         RaycastHit2D kuroSight;
         int layerMask = 1 << 9;
@@ -45,7 +45,7 @@ public class KuroController : MonoBehaviour
         {
             kuroSight = Physics2D.Raycast(kuroSprite.transform.position, -kuroSprite.transform.right, Mathf.Infinity, layerMask);
             Debug.DrawRay(kuroSprite.transform.position, kuroSprite.transform.right, Color.blue);
-
+            Debug.Log(kuroSight.collider);
             if (kuroSight.collider != null)
             {
                 
