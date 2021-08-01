@@ -14,61 +14,13 @@ public class KuroController : MonoBehaviour
     public GameObject EnemyGameObject;
     public BoxCollider2D EnemyCollider;
 
-    float kuroMovSPD = 8f;
-    float kuroJumpHgt = 8f;
-    float kuroHP;
+    public float kuroMovSPD = 8f;
+    public float kuroJumpHgt = 8f;
+    public float kuroHP = 100;
+
+    bool getHit = false;
 
     //Methods
-
-    public bool EnemyDetected() //Method defined to test if the raycast detects the Collider from the Enemy. 
-    {
-        RaycastHit2D sight;
-        int layerMask = 1 << 9;
-        sight = Physics2D.Raycast(kuroSprite.transform.position, kuroSprite.transform.right, Mathf.Infinity, layerMask);
-        Debug.DrawRay(kuroSprite.transform.position, kuroSprite.transform.right, Color.cyan);
-        if (sight.collider == EnemyCollider)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public bool KuroSpotsEnemy() //This method is supposed to be used for Kuro to "see" enemies and "react" to their sighting. 
-                                 //This method works in mysterious ways, Kuro Spots an enemy ONLY after jumping over the enemy and being "behind" it.
-    {
-        RaycastHit2D kuroSight;
-        int layerMask = 1 << 9;
-        if (kuroSprite.flipX == false)
-        {
-            kuroSight = Physics2D.Raycast(kuroSprite.transform.position, -kuroSprite.transform.right, Mathf.Infinity, layerMask);
-            Debug.DrawRay(kuroSprite.transform.position, kuroSprite.transform.right, Color.blue);
-            Debug.Log(kuroSight.collider);
-            if (kuroSight.collider != null)
-            {
-                
-                Debug.Log(kuroSight.collider == EnemyCollider);
-                Debug.Log(kuroSight.collider);
-                return true;
-            }
-        }
-        if (kuroSprite.flipX == true)
-        {
-            kuroSight = Physics2D.Raycast(kuroSprite.transform.position, -kuroSprite.transform.right, Mathf.Infinity, layerMask);
-            Debug.DrawRay(kuroSprite.transform.position, -kuroSprite.transform.right, Color.yellow);
-            Debug.Log(kuroSprite.flipX);
-            if (kuroSight.collider != null)
-            {
-                Debug.Log(kuroSight.collider == EnemyCollider);
-                Debug.Log(kuroSight.collider);
-                return true;
-            }
-        }
-        return false;
-    }
-    
 
     public void MoveKuro()
     {
@@ -88,6 +40,23 @@ public class KuroController : MonoBehaviour
         }
     }
 
+    private void TurnUpSideDown()
+    {
+        Quaternion rotQuaternion = 
+        if (kuroSprite.transform.rotation.z == 0)
+        {
+            kuroSprite.transform.rotation.z = 0;
+        }    
+        if (kuroSprite.transform.rotation.z <= 0.7f && kuroSprite.transform.rotation.z != 0)
+        {
+            kuroSprite.transform.Rotate(0, 0, -90);
+        }
+        if (kuroSprite.transform.rotation.z >= -0.7f && kuroSprite.transform.rotation.z !=  0)
+        {
+            kuroSprite.transform.Rotate(0, 0, 90);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -103,17 +72,17 @@ public class KuroController : MonoBehaviour
     //Update is called once per frame
     void Update()
     {
-        float kuroJump = 0f;
-        bool enemySpotted = KuroSpotsEnemy();
-        //Attempt to move with Translate
-        MoveKuro();
-
-        if (enemySpotted == true)
-        {
-            kuroAnimator.SetBool("EnemySpotted", enemySpotted);
-        }
-        kuroAnimator.SetBool("EnemySpotted", enemySpotted);
+        Debug.Log("The value for the X axis in the rotation is: " + kuroSprite.transform.rotation.x);
+        Debug.Log("The value for the Y axis in the rotation is: " + kuroSprite.transform.rotation.y);
+        Debug.Log("The value for the Z axis in the rotation is: " + kuroSprite.transform.rotation.z);
         
+        float kuroJump = 0f;
+        MoveKuro();
+        if (kuroSprite.transform.rotation.z >= 0 && kuroSprite.transform.rotation.z < 0.7f)
+        {
+            TurnUpSideDown();
+
+        }
         //Code for jumping. *****Pro tip> if player holds Space for 1,5 seconds, Kuro will do longer jumps... levitation :3. It is even
         //possible to perform a jump-attack (basic animation of attacking while jumping). Lucky shot xD, but now I know <3. 
         kuroJump = Input.GetAxis("Jump");
