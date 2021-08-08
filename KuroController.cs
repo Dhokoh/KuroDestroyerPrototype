@@ -21,54 +21,53 @@ public class KuroController : MonoBehaviour
     bool getHit = false;
     bool needsStandUp;
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        KuroControllerGameObject = this.gameObject;
+        KuroControllerTransform = KuroControllerGameObject.transform;
+        kuroAnimator = KuroControllerGameObject.GetComponentInChildren<Animator>();
+        kuroSprite = KuroControllerGameObject.GetComponentInChildren<SpriteRenderer>();
+
+        EnemyGameObject = GameObject.FindGameObjectWithTag("Enemy");
+        EnemyCollider = EnemyGameObject.GetComponent<BoxCollider2D>();
+
+    }
+
     //Private Methods to be used within this class only. Change only if strictly needed. 
 
     private bool HasRotatedZ() //Method commented out due to complication with Quaternions comparations (?).
     {
         Quaternion currentRotation = KuroControllerGameObject.transform.rotation;
-        bool quaterionComparing = (currentRotation.normalized == KuroControllerGameObject.transform.rotation.normalized);
-        bool resultReveal = HasRotatedZ();
-
-        if ((currentRotation.normalized == KuroControllerGameObject.transform.rotation.normalized))
+        if (currentRotation.z >= 0.7f)
         {
-            Debug.Log(resultReveal);
-            Debug.Log(quaterionComparing + " these two are from the **else** HasRotatedZ() method in KuroController");
-            return true;
+            needsStandUp = true;
+            return needsStandUp;
+        }
+        else if (currentRotation.z <= -0.7f)
+        {
+            needsStandUp = true;
+            return needsStandUp;
         }
         else
         {
-            Debug.Log(resultReveal);
-            Debug.Log(quaterionComparing + " this is from the **else** HasRotatedZ() method in KuroController");
+            needsStandUp = false;
             return false;
         }
     }
 
 
-    /*public void StandUp()
+    public void StandUp()
     {
         bool isHorizontal = HasRotatedZ();
-        if (isHorizontal == true)
+        if (isHorizontal == true && KuroControllerGameObject.transform.rotation.z>=0.7f)
+        {
+            KuroControllerGameObject.transform.Rotate(0, 0, -90);
+        }
+        if (isHorizontal == true && KuroControllerGameObject.transform.rotation.z <=-0.7)
         {
             KuroControllerGameObject.transform.Rotate(0, 0, 90);
         }
-    }*/
-
-
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        needsStandUp = HasRotatedZ();
-
-        KuroControllerGameObject = this.gameObject;
-        kuroSprite = KuroControllerGameObject.GetComponentInChildren<SpriteRenderer>();
-        KuroControllerTransform = KuroControllerGameObject.GetComponent<Transform>();
-        kuroAnimator = KuroControllerGameObject.GetComponentInChildren<Animator>();
-
-        EnemyGameObject = GameObject.FindObjectOfType<EnemyController>().gameObject;
-        EnemyCollider = EnemyGameObject.GetComponentInChildren<BoxCollider2D>();
     }
 
 
@@ -83,7 +82,6 @@ public class KuroController : MonoBehaviour
 
     public void MoveKuro()
     {
-        HasRotatedZ();
         SpriteRenderer kuroSprite = this.GetComponentInChildren<SpriteRenderer>();
         //attempt of Transform.Translate()
         if (Input.GetAxis("Horizontal") == 1 | Input.GetKeyDown(KeyCode.D))
@@ -113,9 +111,14 @@ public class KuroController : MonoBehaviour
     //Update is called once per frame
     void Update()
     {
-        Debug.Log("The value for the Z axis in the rotation is: " + kuroSprite.transform.rotation.z);
-        
-        Debug.Log(needsStandUp);
+        HasRotatedZ();
+        if (needsStandUp == true)
+        {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                StandUp();
+            }
+        }
 
         float kuroJump = 0f;
         MoveKuro();
