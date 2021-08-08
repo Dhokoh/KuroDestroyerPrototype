@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
     public SpriteRenderer enemySprite;
     
     public GameObject KuroControllerGameObject;
+    public KuroController kuroCtrl;
     public BoxCollider2D kuroCollider;
 
     //Methods
@@ -43,22 +44,15 @@ public class EnemyController : MonoBehaviour
         {
             EnemyControllerGameObject.transform.Translate(enemyWalkSpeed * Time.deltaTime, 0, 0);
         }
-        
+        enemySprite.flipX=true; 
     }
-
-
-    public void EnemyAttack()
-    {
-
-    }
-
 
     // Start is called before the first frame update
     void Start()
     {
         KuroControllerGameObject = GameObject.FindGameObjectWithTag("Player");
         kuroCollider = KuroControllerGameObject.GetComponent<BoxCollider2D>();
-        //Debug.Log(KuroControllerGameObject.name);
+        kuroCtrl = GameObject.FindObjectOfType<KuroController>();
 
         EnemyControllerGameObject = GameObject.FindGameObjectWithTag("Enemy");
         enemySprite = this.GetComponentInChildren<SpriteRenderer>();
