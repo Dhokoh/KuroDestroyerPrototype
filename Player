@@ -5,22 +5,58 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float hp = 100;
-    public float basic_dmg = 2.5f;
-    public int gold;
+    public float basic_dmg = 50f;
+    public int money;
 
     public GameObject[] equipment = new GameObject[6];
     public GameObject[] inventory = new GameObject[30];
+    public GameObject gemGameObject;
+
+
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        gemGameObject = GameObject.FindObjectOfType<Gem>().gameObject;
     }
 
+
+
+
+    //Class native methods 
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider == gemGameObject.GetComponent<CapsuleCollider2D>())
+        {
+            gemGameObject.GetComponent<Gem>().isTaken = true;
+            gemGameObject.SetActive(false);
+            money += gemGameObject.GetComponent<Gem>().value;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         
-    }
+    }*/
 }
