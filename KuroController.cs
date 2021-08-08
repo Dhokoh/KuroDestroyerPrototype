@@ -16,9 +16,7 @@ public class KuroController : MonoBehaviour
 
     public float kuroMovSPD = 8f;
     public float kuroJumpHgt = 8f;
-    public float kuroHP = 100;
 
-    bool getHit = false;
     bool needsStandUp;
 
     // Start is called before the first frame update
