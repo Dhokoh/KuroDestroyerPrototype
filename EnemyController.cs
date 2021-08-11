@@ -11,8 +11,10 @@ public class EnemyController : MonoBehaviour
     public float enemyHP;//this is to be assigned via the Unity Editor. Not all enemies have the same HP.
     public float enemyDMG;// this is to be assigned via de Unity Editor. Not all enemies deal the same damage. 
     public float enemyWalkSpd;//This is to be assigned via de Unity Editor. Not all enemies walk equally fast. 
-    public float moveUnits = 5;
-    public float initialPosX;
+    public float moveUnits = 1;
+    float enemyStepCounter = 0;
+
+    public Vector2 initialPos;
 
 
     public GameObject EnemyControllerGO;
@@ -21,16 +23,19 @@ public class EnemyController : MonoBehaviour
 
     public bool isFacingRight;
     public bool isBoss; //this is to be assigned via the Unity Editor. Boss class will be created later on and will interact with this one. 
+    public bool hasTurned;
 
     // Start is called before the first frame update
     void Start()
     {
+        hasTurned = false;
         EnemyControllerGO = this.gameObject;
         enemySprite = EnemyControllerGO.GetComponentInChildren<SpriteRenderer>();
         isFacingRight = EnemyControllerGO.transform.localScale.x > 0;
-        initialPosX = EnemyControllerGO.transform.position.x;
+        initialPos = EnemyControllerGO.transform.position;
         Debug.Log(EnemyControllerGO.transform.localScale.x);
         Debug.Log(isFacingRight);
+
     }
 
 
@@ -38,16 +43,28 @@ public class EnemyController : MonoBehaviour
 
     private void TurnAround()
     {
-        transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-        isFacingRight = EnemyControllerGO.transform.localScale.x > 0;
-        Debug.Log(transform.localScale);
-        Debug.Log(isFacingRight);
+        if (hasTurned == false)
+        {
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            hasTurned = true;
+            isFacingRight = EnemyControllerGO.transform.localScale.x > 0;
+            Debug.Log(transform.localScale);
+            Debug.Log(isFacingRight + " this is the isFacingRight value which is a transform.localScale.x > 0");
+            Debug.Log(hasTurned+" this is... well.. hasTurned's value.");
+        }
+        
     }
 
     private void EnemyPatrol()
     {
-        EnemyControllerGO.transform.Translate(-Vector2.right * enemyWalkSpd * Time.deltaTime);
-        Debug.Log(EnemyControllerGO.transform.position);
+        EnemyControllerGO.transform.Translate(Vector2.left * enemyWalkSpd * Time.deltaTime);
+        Vector2 currentPos = EnemyControllerGO.transform.position;
+        Debug.Log(Vector2.Distance(initialPos, currentPos));
+        enemyStepCounter += 1;
+        if(enemyStepCounter == moveUnits)
+        {
+            TurnAround();
+        }
     }
    
 
@@ -63,3 +80,4 @@ public class EnemyController : MonoBehaviour
         EnemyPatrol();
     }
 }
+
