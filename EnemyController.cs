@@ -11,17 +11,15 @@ public class EnemyController : MonoBehaviour
     public float enemyHP;//this is to be assigned via the Unity Editor. Not all enemies have the same HP.
     public float enemyDMG;// this is to be assigned via de Unity Editor. Not all enemies deal the same damage. 
     public float enemyWalkSpd;//This is to be assigned via de Unity Editor. Not all enemies walk equally fast. 
-    public float moveUnits = 1;
-    float enemyStepCounter = 0;
+    public float moveUnits = 1.5f;
+    float enemyStepCounter = 300;
 
     public Vector2 initialPos;
-
 
     public GameObject EnemyControllerGO;
     public SpriteRenderer enemySprite;
     public RaycastHit2D enemySight;
 
-    public bool isFacingRight;
     public bool isBoss; //this is to be assigned via the Unity Editor. Boss class will be created later on and will interact with this one. 
     public bool hasTurned;
 
@@ -31,11 +29,7 @@ public class EnemyController : MonoBehaviour
         hasTurned = false;
         EnemyControllerGO = this.gameObject;
         enemySprite = EnemyControllerGO.GetComponentInChildren<SpriteRenderer>();
-        isFacingRight = EnemyControllerGO.transform.localScale.x > 0;
         initialPos = EnemyControllerGO.transform.position;
-        Debug.Log(EnemyControllerGO.transform.localScale.x);
-        Debug.Log(isFacingRight);
-
     }
 
 
@@ -45,25 +39,26 @@ public class EnemyController : MonoBehaviour
     {
         if (hasTurned == false)
         {
-            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+            EnemyControllerGO.GetComponentInChildren<SpriteRenderer>().flipX = true;
             hasTurned = true;
-            isFacingRight = EnemyControllerGO.transform.localScale.x > 0;
-            Debug.Log(transform.localScale);
-            Debug.Log(isFacingRight + " this is the isFacingRight value which is a transform.localScale.x > 0");
-            Debug.Log(hasTurned+" this is... well.. hasTurned's value.");
         }
-        
+        if (hasTurned == true)
+        {
+            EnemyControllerGO.GetComponentInChildren<SpriteRenderer>().flipX = false;
+            hasTurned = false;
+        }
     }
 
     private void EnemyPatrol()
     {
         EnemyControllerGO.transform.Translate(Vector2.left * enemyWalkSpd * Time.deltaTime);
         Vector2 currentPos = EnemyControllerGO.transform.position;
-        Debug.Log(Vector2.Distance(initialPos, currentPos));
-        enemyStepCounter += 1;
-        if(enemyStepCounter == moveUnits)
+        if (Vector2.Distance(initialPos,currentPos) >= moveUnits)
         {
+            Debug.Log("Code entered the conditional on EnemyPatrol");
+            initialPos = currentPos;
             TurnAround();
+            EnemyControllerGO.transform.Translate(Vector2.right * enemyWalkSpd * Time.deltaTime);
         }
     }
    
@@ -78,6 +73,6 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         EnemyPatrol();
+        Debug.Log(Vector2.Distance(initialPos,EnemyControllerGO.transform.position));
     }
 }
-
